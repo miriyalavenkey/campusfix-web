@@ -14,20 +14,20 @@ app = Flask(__name__)
 app.secret_key = 'campus_fix_secure_production_secret'
 init_db()
 
-# --- SMTP Configuration ---
-# DEV_MODE = True: Prints OTP directly to the VS Code terminal for testing
-# DEV_MODE = False: Sends real email via Gmail SMTP
-DEV_MODE = True
+# --- SMTP Configuration (Live Gmail Real-Time Delivery) ---
+DEV_MODE = False
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465
-SENDER_EMAIL = "your_actual_email@gmail.com"
-SENDER_PASSWORD = "abcd efgh ijkl mnop"
+SENDER_EMAIL = "miriyalavenkey43@gmail.com"
+SENDER_PASSWORD = "nbmd tpkw cxsy ormh"
 
 def send_otp_email(receiver_email, otp_code):
+    # Always print to terminal so you can verify without switching tabs
+    print("\n" + "=" * 50)
+    print(f" [OTP DISPATCH] Destination: {receiver_email} | Code: {otp_code}")
+    print("=" * 50 + "\n")
+
     if DEV_MODE:
-        print("\n" + "="*45)
-        print(f" [DEV MODE] REAL-TIME OTP CODE FOR {receiver_email}: {otp_code}")
-        print("="*45 + "\n")
         return True
 
     try:
@@ -36,16 +36,23 @@ def send_otp_email(receiver_email, otp_code):
         msg['To'] = receiver_email
         msg['Subject'] = f"CampusFix Verification Code: {otp_code}"
 
-        body = f"Hello,\n\nYour verification code is: {otp_code}\n\nValid for 5 minutes.\n\nBest regards,\nCampusFix Admin Team"
+        body = (
+            f"Hello,\n\n"
+            f"Your CampusFix security verification code is: {otp_code}\n\n"
+            f"This code is valid for 5 minutes.\n\n"
+            f"Best regards,\n"
+            f"CampusFix Administration Team"
+        )
         msg.attach(MIMEText(body, 'plain'))
 
         server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, timeout=10)
         server.login(SENDER_EMAIL, SENDER_PASSWORD.replace(" ", ""))
         server.send_message(msg)
         server.quit()
+        print(f"[SMTP SUCCESS] Email delivered to {receiver_email}")
         return True
     except Exception as e:
-        print(f"SMTP Error: {e}")
+        print(f"[SMTP ERROR] Delivery failed: {e}")
         return False
 
 # --- Access Decorators ---
@@ -299,7 +306,7 @@ def tickets():
     conn = get_db()
     cursor = conn.cursor()
 
-    if session['role'] == 'admin':
+    if session.get('role') == 'admin':
         if search_query:
             cursor.execute("SELECT * FROM complaints WHERE complaint_id LIKE ? OR student_name LIKE ? ORDER BY id DESC", 
                            (f"%{search_query}%", f"%{search_query}%"))
@@ -391,23 +398,22 @@ def analytics():
     df_maint = pd.read_sql_query("SELECT * FROM maintenance", conn)
     conn.close()
 
-    # Pre-defined display sequence matching reference charts
     building_order = ['Block A', 'Block B', 'Block C', 'Computer Lab', 'Library', 'Hostel Block']
     category_order = ['Electrical', 'Furniture', 'Plumbing', 'IT', 'Internet', 'Cleaning', 'AC/Cooling', 'Other']
 
-    # 1. Building counts (matching fixed display order)
+    # 1. Building counts
     bld_counts = df_complaints['building'].value_counts().to_dict() if not df_complaints.empty else {}
     buildings = building_order
     building_data = [bld_counts.get(b, 0) for b in buildings]
 
-    # 2. Monthly Trend (chronologically sorted)
+    # 2. Monthly Trend
     if not df_complaints.empty and 'date' in df_complaints:
         df_complaints['month'] = pd.to_datetime(df_complaints['date']).dt.strftime('%Y-%m')
         month_counts = df_complaints['month'].value_counts().sort_index().to_dict()
     else:
         month_counts = {}
 
-    # 3. Cost by Category (matching fixed display order)
+    # 3. Cost by Category
     if not df_maint.empty and not df_complaints.empty:
         merged = pd.merge(df_complaints, df_maint, on='complaint_id')
         cost_map = merged.groupby('category')['cost'].sum().to_dict()
