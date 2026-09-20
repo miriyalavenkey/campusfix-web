@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>COMPLAINTS BY BUILDING</h3>
+      <canvas id="buildingChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h3>COMPLAINTS REPORTED PER MONTH</h3>
+      <canvas id="monthlyChart"></canvas>
+    </div>
+
+    <div class="chart-card full-width">
+      <h3>REPAIR COST BY CATEGORY</h3>
+      <canvas id="costChart"></canvas>
+    </div>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+{% endblock %}

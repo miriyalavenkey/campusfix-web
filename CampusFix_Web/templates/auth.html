@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width: 460px; margin-top: 3.5rem;">
+  <div class="form-card" style="padding: 2.5rem;">
+
+    <div style="margin-bottom: 1.75rem; text-align: center;">
+      <h2 style="font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px;">
+        {% if mode == 'signup' %}
+          CREATE ACCOUNT
+        {% elif mode == 'verify_signup_otp' %}
+          VERIFY REGISTRATION CODE
+        {% elif mode == 'request_otp' %}
+          EMAIL LOGIN (OTP)
+        {% elif mode == 'verify_otp' %}
+          VERIFY CODE
+        {% else %}
+          SIGN IN
+        {% endif %}
+      </h2>
+      <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.3rem;">
+        {% if mode == 'signup' %}
+          Register your student credentials below
+        {% elif mode == 'verify_signup_otp' %}
+          Check your email (or terminal in dev mode) for the verification code
+        {% elif mode == 'request_otp' %}
+          Enter your registered email to receive a login passcode
+        {% elif mode == 'verify_otp' %}
+          Enter the 6-digit code received
+        {% else %}
+          Enter your username/email and password to continue
+        {% endif %}
+      </p>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div style="background: rgba(245, 158, 11, 0.15); border: 1px solid #f59e0b; color: #f59e0b; padding: 0.75rem; border-radius: 8px; margin-bottom: 1.25rem; font-size: 0.85rem; text-align: center;">
+          {{ messages[0] }}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- 1. Password Login Form -->
+    {% if mode == 'login_password' %}
+    <form method="POST" action="{{ url_for('login_password') }}">
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div class="form-group">
+          <label>USERNAME OR EMAIL</label>
+          <input type="text" name="username" placeholder="e.g. rahul or rahul@campus.edu" required>
+        </div>
+        <div class="form-group">
+          <label>PASSWORD</label>
+          <input type="password" name="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-submit" style="margin-top: 0.5rem; width: 100%;">Sign In</button>
+      </div>
+    </form>
+    <div style="text-align: center; margin-top: 1.2rem;">
+      <a href="{{ url_for('login_otp') }}" style="color: #0284c7; font-size: 0.85rem; text-decoration: none; font-weight: 600;">
+        🔑 Sign in with Email OTP instead
+      </a>
+    </div>
+
+    <!-- 2. Request OTP Form -->
+    {% elif mode == 'request_otp' %}
+    <form method="POST" action="{{ url_for('login_otp') }}">
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div class="form-group">
+          <label>REGISTERED EMAIL ADDRESS</label>
+          <input type="email" name="email" placeholder="e.g. rahul@campus.edu" required>
+        </div>
+        <button type="submit" class="btn-submit" style="margin-top: 0.5rem; width: 100%;">Send One-Time Code</button>
+      </div>
+    </form>
+    <div style="text-align: center; margin-top: 1.2rem;">
+      <a href="{{ url_for('login_password') }}" style="color: #64748b; font-size: 0.85rem; text-decoration: none;">
+        ← Back to Password Login
+      </a>
+    </div>
+
+    <!-- 3. Verify Login OTP Form -->
+    {% elif mode == 'verify_otp' %}
+    <form method="POST" action="{{ url_for('verify_otp') }}">
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div class="form-group">
+          <label>6-DIGIT VERIFICATION CODE</label>
+          <input type="text" name="otp" maxlength="6" pattern="[0-9]{6}" placeholder="123456" style="text-align: center; font-size: 1.5rem; letter-spacing: 6px; font-weight: 700;" required autofocus>
+        </div>
+        <button type="submit" class="btn-submit" style="margin-top: 0.5rem; width: 100%;">Verify & Sign In</button>
+      </div>
+    </form>
+    <div style="text-align: center; margin-top: 1.2rem;">
+      <a href="{{ url_for('login_otp') }}" style="color: #64748b; font-size: 0.85rem; text-decoration: none;">
+        Resend Code
+      </a>
+    </div>
+
+    <!-- 4. Sign Up Form -->
+    {% elif mode == 'signup' %}
+    <form method="POST" action="{{ url_for('signup') }}">
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div class="form-group">
+          <label>USERNAME</label>
+          <input type="text" name="username" placeholder="e.g. rahul" required>
+        </div>
+        <div class="form-group">
+          <label>CAMPUS EMAIL</label>
+          <input type="email" name="email" placeholder="rahul@campus.edu" required>
+        </div>
+        <div class="form-group">
+          <label>ACCOUNT TYPE</label>
+          <select name="role" required>
+            <option value="student">Student</option>
+            <option value="admin">Administrator / Technician</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>PASSWORD</label>
+          <input type="password" name="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-submit" style="margin-top: 0.5rem; width: 100%;">Register</button>
+      </div>
+    </form>
+
+    <!-- 5. Verify Registration OTP Form -->
+    {% elif mode == 'verify_signup_otp' %}
+    <form method="POST" action="{{ url_for('verify_signup_otp') }}">
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <p style="font-size: 0.85rem; color: #64748b; text-align: center;">
+          Enter the 6-digit code sent to <strong>{{ session.get('reg_user', {}).get('email') }}</strong>
+        </p>
+        <div class="form-group">
+          <label>6-DIGIT CODE</label>
+          <input type="text" name="otp" maxlength="6" pattern="[0-9]{6}" placeholder="123456" style="text-align: center; font-size: 1.5rem; letter-spacing: 6px; font-weight: 700;" required autofocus>
+        </div>
+        <button type="submit" class="btn-submit" style="margin-top: 0.5rem; width: 100%;">Verify & Complete Registration</button>
+      </div>
+    </form>
+    <div style="text-align: center; margin-top: 1.2rem;">
+      <a href="{{ url_for('signup') }}" style="color: #64748b; font-size: 0.85rem; text-decoration: none;">
+        Cancel & Register Again
+      </a>
+    </div>
+    {% endif %}
+
+    <div style="margin-top: 1.75rem; text-align: center; font-size: 0.85rem; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
+      {% if mode == 'signup' %}
+        Already have an account? <a href="{{ url_for('login_password') }}" style="color: #0f172a; font-weight: 700;">Sign in</a>
+      {% else %}
+        Don't have an account? <a href="{{ url_for('signup') }}" style="color: #0f172a; font-weight: 700;">Create one</a>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+{% endblock %}

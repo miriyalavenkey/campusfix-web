@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <div class="dashboard-grid">
+    <div>
+      <div class="hero-tag">● Live Across 6 Campus Buildings</div>
+      <h1 class="hero-title">EVERY SQUEAK, LEAK, AND <span>FLICKER</span> — LOGGED, TRACKED, FIXED.</h1>
+      <p class="hero-desc">
+        CampusFix turns scattered maintenance complaints into a single work-order board — from the moment a student reports a broken fan to the day a technician closes the ticket.
+      </p>
+      <div class="hero-actions">
+        <a href="{{ url_for('tickets') }}" class="btn-cyan">Open the Console</a>
+        <a href="{{ url_for('register') }}" class="btn-outline">Report an Issue &rarr;</a>
+      </div>
+    </div>
+
+    <div class="node-display">
+      <div class="node-card" style="top: 25%; left: 10%;">
+        <strong>Block A · Rm 204</strong>
+        <span>Fan not working</span>
+      </div>
+      <div class="node-card" style="top: 15%; right: 15%;">
+        <strong>Library</strong>
+        <span>Wi-Fi down</span>
+      </div>
+      <div class="node-card" style="bottom: 20%; left: 20%;">
+        <strong>Block C · Rm 118</strong>
+        <span>Tap leakage</span>
+      </div>
+      <div class="node-card" style="bottom: 30%; right: 10%;">
+        <strong>Computer Lab</strong>
+        <span>Projector fault</span>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

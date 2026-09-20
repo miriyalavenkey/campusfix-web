@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width: 850px;">
+  <div style="margin-bottom: 1.5rem;">
+    <h2 style="font-size: 2rem; font-weight: 800; letter-spacing: -0.5px;">REGISTER A COMPLAINT</h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">Fill in the details below — a ticket ID is generated automatically.</p>
+  </div>
+
+  <div class="form-card">
+    <div class="ticket-badge">NEW TICKET</div>
+    <form action="{{ url_for('register') }}" method="POST">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>STUDENT NAME</label>
+          <input type="text" name="student_name" value="{{ session.get('username') }}" readonly style="background: #e2e8f0; color: #475569;">
+        </div>
+        <div class="form-group">
+          <label>DEPARTMENT</label>
+          <select name="department" required>
+            <option value="">Select department</option>
+            <option value="BCA">BCA</option>
+            <option value="B.Tech">B.Tech</option>
+            <option value="MCA">MCA</option>
+            <option value="B.Sc">B.Sc</option>
+            <option value="BBA">BBA</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>BUILDING</label>
+          <select name="building" required>
+            <option value="">Select building</option>
+            <option value="Block A">Block A</option>
+            <option value="Block B">Block B</option>
+            <option value="Block C">Block C</option>
+            <option value="Computer Lab">Computer Lab</option>
+            <option value="Library">Library</option>
+            <option value="Hostel Block">Hostel Block</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>ROOM NO.</label>
+          <input type="text" name="room_no" placeholder="e.g. 204" required>
+        </div>
+        <div class="form-group">
+          <label>CATEGORY</label>
+          <select name="category" required>
+            <option value="">Select category</option>
+            <option value="Electrical">Electrical</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Plumbing">Plumbing</option>
+            <option value="IT">IT</option>
+            <option value="Internet">Internet</option>
+            <option value="Cleaning">Cleaning</option>
+            <option value="AC/Cooling">AC/Cooling</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>PRIORITY</label>
+          <select name="priority" required>
+            <option value="Low">Low</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>PROBLEM DESCRIPTION</label>
+          <textarea name="problem" rows="4" placeholder="Describe what's wrong, e.g. 'Ceiling fan makes a loud noise and doesn\'t reach full speed.'" required></textarea>
+        </div>
+      </div>
+      <div style="margin-top: 2rem; display: flex; align-items: center; gap: 1.5rem;">
+        <button type="submit" class="btn-submit">Register complaint</button>
+        <span style="font-size: 0.8rem; color: #64748b;">Date & ticket ID are assigned automatically on submit.</span>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

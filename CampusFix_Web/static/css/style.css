@@ -1,0 +1,311 @@
+:root {
+  --bg-primary: #08121f;
+  --bg-card: #0e1e33;
+  --accent-cyan: #38bdf8;
+  --accent-amber: #f59e0b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: #1e293b;
+  --cream-card: #fdfbf7;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background-color: var(--bg-primary);
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: -1px -1px;
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+/* Header & Nav */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(8, 18, 31, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-icon {
+  background: #38bdf8;
+  color: #07111e;
+  font-weight: 800;
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+}
+
+.brand-title {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  font-size: 1.25rem;
+}
+
+.brand-sub {
+  font-size: 0.65rem;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+}
+
+.nav-pills {
+  display: flex;
+  background: #0d1e34;
+  padding: 0.3rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border-color);
+  gap: 0.2rem;
+}
+
+.nav-pills a {
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 0.45rem 1.4rem;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.nav-pills a.active, .nav-pills a:hover {
+  background: #38bdf8;
+  color: #07111e;
+  font-weight: 600;
+}
+
+.btn-report {
+  background: #f59e0b;
+  color: #07111e;
+  border: none;
+  font-weight: 700;
+  padding: 0.6rem 1.4rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+}
+
+/* Layout */
+.container {
+  max-width: 1200px;
+  margin: 2.5rem auto;
+  padding: 0 1.5rem;
+}
+
+/* Dashboard Hero */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 3rem;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.hero-tag {
+  color: #34d399;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(52, 211, 153, 0.2);
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title span {
+  color: #f59e0b;
+}
+
+.hero-desc {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-cyan {
+  background: #38bdf8;
+  color: #07111e;
+  padding: 0.75rem 1.75rem;
+  border-radius: 8px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.btn-outline {
+  border: 1px solid #334155;
+  color: #f8fafc;
+  padding: 0.75rem 1.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Map Display */
+.node-display {
+  position: relative;
+  height: 380px;
+  border: 1px dashed rgba(56, 189, 248, 0.2);
+  border-radius: 12px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.node-card {
+  position: absolute;
+  background: #fdfbf7;
+  color: #0f172a;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  font-size: 0.85rem;
+}
+
+.node-card strong {
+  display: block;
+  font-size: 0.95rem;
+}
+
+/* Form Styles */
+.form-card {
+  background: var(--cream-card);
+  color: #0f172a;
+  border-radius: 20px;
+  padding: 3rem;
+  position: relative;
+}
+
+.ticket-badge {
+  position: absolute;
+  top: 2rem;
+  right: 2.5rem;
+  border: 2px dashed #ea580c;
+  color: #ea580c;
+  font-weight: 800;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  transform: rotate(5deg);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group.full {
+  grid-column: span 2;
+}
+
+.form-group label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #475569;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+  padding: 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  font-size: 0.95rem;
+  color: #0f172a;
+}
+
+.btn-submit {
+  background: #0f172a;
+  color: #ffffff;
+  padding: 0.9rem 2rem;
+  border-radius: 8px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Tables */
+.table-card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th, td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+/* Charts */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.chart-card.full-width {
+  grid-column: span 2;
+}
+
+.chart-card h3 {
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  color: var(--text-muted);
+}

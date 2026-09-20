@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+      <h2 style="font-size: 2rem; font-weight: 800;">
+        {{ 'ALL MAINTENANCE TICKETS' if session.get('role') == 'admin' else 'MY TICKETS' }}
+      </h2>
+      <p style="color: var(--text-muted);">
+        {{ 'Admin Console: Manage, search, and update campus tickets.' if session.get('role') == 'admin' else 'Track status and details of your reported issues.' }}
+      </p>
+    </div>
+    <form method="GET" action="{{ url_for('tickets') }}">
+      <input type="text" name="search" value="{{ search or '' }}" placeholder="Search ID or name..." style="padding: 0.6rem 1rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: white;">
+    </form>
+  </div>
+
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Student</th>
+          <th>Location</th>
+          <th>Category</th>
+          <th>Problem</th>
+          <th>Priority</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if complaints %}
+          {% for row in complaints %}
+          <tr>
+            <td><strong>{{ row['complaint_id'] }}</strong></td>
+            <td>
+              {{ row['student_name'] }}<br>
+              <small style="color: var(--text-muted)">{{ row['department'] }}</small>
+            </td>
+            <td>{{ row['building'] }} - {{ row['room_no'] }}</td>
+            <td>{{ row['category'] }}</td>
+            <td>{{ row['problem'] }}</td>
+            <td>{{ row['priority'] }}</td>
+            <td>
+              {% if row['status'] == 'Resolved' %}
+                <span style="padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.8rem; background: rgba(52, 211, 153, 0.15); color: #34d399;">
+                  Resolved
+                </span>
+              {% elif row['status'] == 'In Progress' %}
+                <span style="padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.8rem; background: rgba(245, 158, 11, 0.15); color: #f59e0b;">
+                  In Progress
+                </span>
+              {% else %}
+                <span style="padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.8rem; background: rgba(239, 68, 68, 0.15); color: #ef4444;">
+                  Pending
+                </span>
+              {% endif %}
+            </td>
+            <td>
+              {% if session.get('role') == 'admin' %}
+                <form action="{{ url_for('update_status', complaint_id=row['complaint_id']) }}" method="POST">
+                  <select name="status" onchange="this.form.submit()" style="background: #1e293b; color: white; border: 1px solid #334155; padding: 0.35rem 0.5rem; border-radius: 6px; cursor: pointer;">
+                    <option value="Pending" {% if row['status'] == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="In Progress" {% if row['status'] == 'In Progress' %}selected{% endif %}>In Progress</option>
+                    <option value="Resolved" {% if row['status'] == 'Resolved' %}selected{% endif %}>Resolved</option>
+                  </select>
+                </form>
+              {% else %}
+                <span style="color: var(--text-muted); font-size: 0.85rem;">Read Only</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">
+              No tickets found.
+            </td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

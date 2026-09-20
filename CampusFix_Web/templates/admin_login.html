@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width: 440px; margin-top: 3.5rem;">
+  <div class="form-card" style="padding: 2.5rem; border-top: 4px solid #f59e0b;">
+    <div style="margin-bottom: 1.5rem; text-align: center;">
+      <span style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px;">
+        RESTRICTED AREA
+      </span>
+      <h2 style="font-size: 1.75rem; font-weight: 800; margin-top: 0.75rem;">ADMIN PORTAL</h2>
+      <p style="color: #64748b; font-size: 0.85rem;">Technician & Maintenance Staff Access</p>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #ef4444; padding: 0.75rem; border-radius: 8px; margin-bottom: 1.25rem; font-size: 0.85rem; text-align: center;">
+          {{ messages[0] }}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('admin_login') }}">
+      <div style="display: flex; flex-direction: column; gap: 1.2rem;">
+        <div class="form-group">
+          <label>ADMIN USERNAME / EMAIL</label>
+          <input type="text" name="username" placeholder="e.g. admin" required autofocus>
+        </div>
+        <div class="form-group">
+          <label>PASSWORD</label>
+          <input type="password" name="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-submit" style="background: #f59e0b; color: #07111e; font-weight: 800; margin-top: 0.5rem; width: 100%;">
+          Access Control Center
+        </button>
+      </div>
+    </form>
+
+    <div style="text-align: center; margin-top: 1.5rem; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
+      <a href="{{ url_for('login_password') }}" style="color: #64748b; font-size: 0.85rem; text-decoration: none;">
+        ← Switch to Student Login
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
